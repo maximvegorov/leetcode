@@ -4,7 +4,7 @@ public class Program {
     public static void main(String[] args) {
         System.out.println(
                 new Solution().findMedianSortedArrays(
-                        new int[] {1, 2}, new int[] { 1, 2 }));
+                        new int[] {1, 4}, new int[] { 2, 3, 5, 6, 7, 8 }));
 
     }
 
@@ -35,8 +35,8 @@ public class Program {
             return result;
         }
 
-        private int binarySearch(int[] nums, int toIndex, int value) {
-            int l = 0;
+        private int binarySearch(int[] nums, int fromIndex, int toIndex, int value) {
+            int l = fromIndex;
             int r = toIndex;
             while (l < r) {
                 int probe = (l + r) / 2;
@@ -50,23 +50,45 @@ public class Program {
             return r;
         }
 
-        private Double getByIndexOfOverlap(int[] nums1, int[] nums2, int index) {
-            int l = 0;
-            int r = nums1.length;
-            while (l < r) {
-                int probe = (l + r) / 2;
-
-                int remainMax = binarySearch(nums2, nums2.length, nums1[probe]);
-                int remainMin = binarySearch(nums2, remainMax, nums1[probe] - 1);
-                if (probe + remainMin <= index && index <= probe + remainMax)
-                    return (double)nums1[probe];
-                else if (probe + remainMax < index)
-                    l = probe + 1;
+        private double getByIndexOfOverlap(int[] nums1, int[] nums2, int index) {
+            int l1 = 0;
+            int r1 = nums1.length;
+            int l2 = 0;
+            int r2 = nums2.length;
+            for (;l1 < r1 && l2 < r2;) {
+                int probe1 = l1 + (r1 - l1) / 2;
+                int probe2 = l2 + (r2 - l2) / 2;
+                int probe1Value = nums1[probe1];
+                int probe2Value = nums2[probe2];
+                if (probe1Value <= probe2Value) {
+                    probe1 = binarySearch(nums1, probe1, r1, probe2Value);
+                }
                 else {
-                    r = probe;
+                    probe2 = binarySearch(nums2, probe2, r2, probe1Value);
+                }
+                int mid = probe1 + probe2;
+                if (mid == index) {
+                    return Math.max(probe1Value, probe2Value);
+                }
+                else if (index < mid) {
+                    r1 = probe1;
+                    r2 = probe2;
+                }
+                else {
+                    l1 = probe1;
+                    l2 = probe2;
+                    if (probe1Value <= probe2Value)
+                        l2 = probe2 + 1;
+                    else
+                        l1 = probe1 + 1;
                 }
             }
-            return null;
+            if (l1 >= r1) {
+                return nums2[index - l1];
+            }
+            else {
+                return nums1[index - l2];
+            }
         }
 
         double findMedianSortedArrays(int[] nums1, int[] nums2) {
@@ -86,19 +108,11 @@ public class Program {
 
             int length = nums1.length + nums2.length;
             int secondIndex = length / 2;
-            Double second = getByIndexOfOverlap(nums1, nums2, secondIndex);
-            if (second == null) {
-                second = getByIndexOfOverlap(nums2, nums1, secondIndex);
-                assert second != null;
-            }
+            double second = getByIndexOfOverlap(nums1, nums2, secondIndex);
 
-            Double first;
+            double first;
             if (length % 2 == 0) {
                 first = getByIndexOfOverlap(nums1, nums2, secondIndex - 1);
-                if (first == null) {
-                    first = getByIndexOfOverlap(nums2, nums1, secondIndex - 1);
-                    assert first != null;
-                }
             } else {
                 first = second;
             }
