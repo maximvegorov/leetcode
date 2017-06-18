@@ -1,0 +1,12 @@
+rootProject.name = 'leetcode'
+
+include 'continuous-subarray-sum'
+include 'minimum-path-sum'
+include 'max-points-on-a-line'
+include 'coin-change'
+include 'word-break'
+include 'sort-list'
+include 'find-largest-value-in-each-tree-row'
+include 'top-k-frequent-elements'
+include 'median-of-two-sorted-arrays'
+
