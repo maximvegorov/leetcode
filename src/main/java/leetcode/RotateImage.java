@@ -11,13 +11,14 @@ public final class RotateImage {
             if (n == 0) {
                 return;
             }
+
+            n--;
+
             int t = 0;
-            int r = n - 1;
-            int b = n - 1;
+            int r = n;
+            int b = n;
             int l = 0;
             while (t <= b && l <= r) {
-                n--;
-
                 for (int i = 0; i < n; i++) {
                     int lt = matrix[t][l + i];
                     int rt = matrix[t + i][r];
@@ -30,6 +31,7 @@ public final class RotateImage {
                     matrix[t][l + i] = lb;
                 }
 
+                n -= 2;
                 t++;
                 r--;
                 b--;
