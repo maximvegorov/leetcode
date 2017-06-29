@@ -11,18 +11,16 @@ public final class TargetSum {
     }
 
     public static final class Solution {
-        private static final int MAX_SUM = 1_000;
-        private static final int ZERO_INDEX = MAX_SUM;
-
         public int findTargetSumWays(int[] nums, int S) {
-            if (S < -MAX_SUM || S > MAX_SUM) {
+            int totalSum = Arrays.stream(nums).sum();
+            if (S < -totalSum || S > totalSum) {
                 return 0;
             }
-            int[] partialSums0 = new int[2 * MAX_SUM + 1];
-            int[] partialSums1 = new int[2 * MAX_SUM + 1];
-            partialSums0[ZERO_INDEX + nums[0]] = 1;
-            partialSums0[ZERO_INDEX - nums[0]] = 1;
-            for (int i = 1; i < nums.length; i++) {
+            int zeroIndex = totalSum;
+            int[] partialSums0 = new int[2 * totalSum + 1];
+            int[] partialSums1 = new int[2 * totalSum + 1];
+            partialSums0[zeroIndex] = 1;
+            for (int i = 0; i < nums.length; i++) {
                 Arrays.fill(partialSums1, 0);
                 for (int j = 0; j < partialSums1.length; j++) {
                     if (partialSums0[j] == 0) {
@@ -35,7 +33,7 @@ public final class TargetSum {
                 partialSums0 = partialSums1;
                 partialSums1 = temp;
             }
-            return partialSums0[ZERO_INDEX + S];
+            return partialSums0[zeroIndex + S];
         }
     }
 }
