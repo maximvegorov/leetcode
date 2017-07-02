@@ -19,7 +19,6 @@ public final class WordBreak {
                     .mapToObj(i -> new ArrayList<String>())
                     .collect(Collectors.toList());
             wordDict.forEach(w -> wordsByFirstLetter.get(w.charAt(0) - 'a').add(w));
-            wordDict.sort(String::compareTo);
             boolean[] breaks = new boolean[s.length() + 1];
             breaks[s.length()] = true;
             for (int i = s.length() - 1; i >= 0; i--) {
