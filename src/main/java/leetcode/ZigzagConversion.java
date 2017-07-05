@@ -1,7 +1,5 @@
 package leetcode;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class ZigzagConversion {
@@ -11,24 +9,34 @@ public final class ZigzagConversion {
 
     public static final class Solution {
         public String convert(String s, int numRows) {
-            if (numRows <= 1) {
+            if (s.isEmpty() || numRows <= 1) {
                 return s;
             }
-            StringBuilder[] builders = IntStream.range(0, numRows)
-                    .mapToObj(StringBuilder::new)
-                    .toArray(StringBuilder[]::new);
             int mod = 2 * numRows - 2;
-            for (int i = 0; i < s.length(); i++) {
-                int j = i % mod;
-                if (j < numRows) {
-                    builders[j].append(s.charAt(i));
-                } else {
-                    builders[mod - j].append(s.charAt(i));
-                }
+            int[] newIndexes = IntStream.range(0, s.length())
+                    .boxed()
+                    .sorted((i1, i2) -> {
+                        int j1 = i1 % mod;
+                        if (j1 >= numRows) {
+                            j1 = mod - j1;
+                        }
+                        int j2 = i2 % mod;
+                        if (j2 >= numRows) {
+                            j2 = mod - j2;
+                        }
+                        int cmp = Integer.compare(j1, j2);
+                        if (cmp == 0) {
+                            cmp = Integer.compare(i1, i2);
+                        }
+                        return cmp;
+                    })
+                    .mapToInt(i -> i)
+                    .toArray();
+            char[] result = new char[s.length()];
+            for (int i = 0; i < newIndexes.length; i++) {
+                result[i] = s.charAt(newIndexes[i]);
             }
-            return Arrays.stream(builders)
-                    .map(StringBuilder::toString)
-                    .collect(Collectors.joining());
+            return new String(result);
         }
     }
 }
