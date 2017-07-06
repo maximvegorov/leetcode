@@ -1,44 +1,10 @@
 package leetcode;
 
+import leetcode.common.ListNode;
+
 public final class SwapNodesInPairs {
     public static void main(String[] args) {
-        new Solution().swapPairs(ListNode.build(1, 2, 3)).print();
-    }
-
-    public static final class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-        }
-
-        public static ListNode build(int... values) {
-            if (values.length == 0) {
-                return null;
-            }
-            ListNode root = new ListNode(values[0]);
-            ListNode tail = root;
-            for (int i = 1; i < values.length; i++) {
-                ListNode node = new ListNode(values[i]);
-                tail.next = node;
-                tail = node;
-            }
-            return root;
-        }
-
-        @Override
-        public String toString() {
-            return "ListNode{" +
-                    "val=" + val +
-                    '}';
-        }
-
-        public void print() {
-            for (ListNode node = this; node != null; node = node.next) {
-                System.out.println(node.val);
-            }
-        }
+        ListNode.print(new Solution().swapPairs(ListNode.build(1, 2, 3)));
     }
 
     public static final class Solution {

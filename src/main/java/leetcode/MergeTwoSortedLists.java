@@ -1,17 +1,10 @@
 package leetcode;
 
+import leetcode.common.ListNode;
+
 public final class MergeTwoSortedLists {
     public static void main(String[] args) {
 
-    }
-
-    static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-        }
     }
 
     public static final class Solution {
