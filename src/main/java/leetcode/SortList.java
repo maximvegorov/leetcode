@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import leetcode.common.ListNode;
+
 public class SortList {
     public static void main(String[] args) throws IOException {
         List<String> lines = Files.readAllLines(
@@ -84,21 +86,6 @@ public class SortList {
             }
 
             return headOfSorted.next;
-        }
-    }
-
-    public static class ListNode {
-        int val;
-
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-        }
-
-        ListNode(int x, ListNode next) {
-            val = x;
-            this.next = next;
         }
     }
 }
