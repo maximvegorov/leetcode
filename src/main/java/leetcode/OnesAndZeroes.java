@@ -31,24 +31,28 @@ public final class OnesAndZeroes {
                     .map(Solution::buildPair)
                     .toArray(Pair[]::new);
 
-            int[][][] table = new int[m + 1][n + 1][pairs.length + 1];
+            int[][] table0 = new int[m + 1][n + 1];
+            int[][] table1 = new int[m + 1][n + 1];
 
-            for (int i = 0; i <= m; i++) {
-                for (int j = 0; j <= n; j++) {
-                    for (int k = 1; k <= pairs.length; k++) {
-                        Pair pair = pairs[k - 1];
+            for (int k = 1; k <= pairs.length; k++) {
+                Pair pair = pairs[k - 1];
+                for (int i = 0; i <= m; i++) {
+                    for (int j = 0; j <= n; j++) {
                         if (pair.zeroCount > i || pair.oneCount > j) {
-                            table[i][j][k] = table[i][j][k - 1];
+                            table1[i][j] = table0[i][j];
                         } else {
-                            table[i][j][k] = Math.max(
-                                    table[i - pair.zeroCount][j - pair.oneCount][k - 1] + 1,
-                                    table[i][j][k - 1]);
+                            table1[i][j] = Math.max(
+                                    table0[i - pair.zeroCount][j - pair.oneCount] + 1,
+                                    table0[i][j]);
                         }
                     }
                 }
+                int[][] tmp = table0;
+                table0 = table1;
+                table1 = tmp;
             }
 
-            return table[m][n][pairs.length];
+            return table0[m][n];
         }
 
         static final class Pair {
