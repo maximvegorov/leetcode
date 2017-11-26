@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import leetcode.common.Interval;
+
 public final class InsertInterval {
     public static void main(String[] args) {
         System.out.println(
@@ -11,26 +13,6 @@ public final class InsertInterval {
                         Collections.singletonList(
                                 new Interval(1, 5)),
                         new Interval(6, 8)).toString());
-    }
-
-    public static final class Interval {
-        int start;
-        int end;
-
-        Interval() {
-            start = 0;
-            end = 0;
-        }
-
-        Interval(int s, int e) {
-            start = s;
-            end = e;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + start + "," + end + "]";
-        }
     }
 
     public static final class Solution {
