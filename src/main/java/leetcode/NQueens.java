@@ -54,12 +54,12 @@ public final class NQueens {
         }
 
         private static final class Chessboard {
-            private final int size;
             private final int[][] board;
+            private final int size;
 
             Chessboard(int n) {
-                size = n;
                 board = new int[n][n];
+                size = n;
             }
 
             private List<String> toSolution() {
