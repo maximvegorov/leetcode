@@ -1,5 +1,8 @@
 package leetcode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SubArraySumEqualsK {
     public static void main(String[] args) {
         System.out.println(new Solution().subarraySum(new int[]{1, 1, 1}, 2));
@@ -15,12 +18,12 @@ public class SubArraySumEqualsK {
                 sums[i + 1] = sums[i] + nums[i];
             }
             int count = 0;
+            Map<Integer, Integer> map = new HashMap<>(nums.length);
+            map.put(0, 1);
             for (int i = 0; i < nums.length; i++) {
-                for (int j = i + 1; j <= nums.length; j++) {
-                    if (sums[j] - sums[i] == k) {
-                        count++;
-                    }
-                }
+                int sum = sums[i + 1];
+                count += map.getOrDefault(sum - k, 0);
+                map.put(sum, map.getOrDefault(sum, 0) + 1);
             }
             return count;
         }
