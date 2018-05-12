@@ -2,6 +2,7 @@ package leetcode;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.LinkedList;
 
 public class LargestRectangleInHistogram {
     public static void main(String[] args) {
@@ -10,20 +11,22 @@ public class LargestRectangleInHistogram {
 
     static class Solution {
         public int largestRectangleArea(int[] heights) {
-            Deque<PosHeight> stack = new ArrayDeque<>(heights.length);
+            Deque<PosHeight> stack = new ArrayDeque<>();
             long maxSquare = 0;
             for (int i = 0; i < heights.length; i++) {
                 int height = heights[i];
                 int pos = i;
-                while (!stack.isEmpty() && stack.peekLast().getHeight() >= height) {
+                while (!stack.isEmpty() && stack.peekLast().getHeight() > height) {
                     pos = stack.removeLast().getPos();
                 }
-                stack.addLast(new PosHeight(pos, height));
+                PosHeight last = stack.peekLast();
+                if (last == null || last.getHeight() < height) {
+                    stack.addLast(new PosHeight(pos, height));
+                }
                 for (PosHeight ph : stack) {
                     int square = (i - ph.getPos() + 1) * ph.getHeight();
                     if (maxSquare < square)
                         maxSquare = square;
-
                 }
             }
             return (int)maxSquare;
@@ -38,11 +41,11 @@ public class LargestRectangleInHistogram {
                 this.height = height;
             }
 
-            public int getPos() {
+            int getPos() {
                 return pos;
             }
 
-            public int getHeight() {
+            int getHeight() {
                 return height;
             }
         }
