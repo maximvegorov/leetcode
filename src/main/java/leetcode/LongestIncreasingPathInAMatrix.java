@@ -1,6 +1,8 @@
 package leetcode;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Objects;
+import java.util.PriorityQueue;
 
 public class LongestIncreasingPathInAMatrix {
     public static void main(String[] args) {
@@ -19,53 +21,47 @@ public class LongestIncreasingPathInAMatrix {
 
             int colCount = matrix[0].length;
 
-            boolean[][] visited = new boolean[matrix.length][colCount];
-
-            Cell newLevelCell = new Cell(-1, -1);
-            int maxLength = 0;
+            Cell[][] cells = new Cell[matrix.length][colCount];
+            PriorityQueue<Cell> unprocessed = new PriorityQueue<>(
+                    Comparator.comparingInt(cell -> -matrix[cell.getRow()][cell.getCol()]));
             for (int i = 0; i < matrix.length; i++) {
                 for (int j = 0; j < colCount; j++) {
-                    if (visited[i][j])
-                        continue;
-
-                    Queue<Cell> queue = new ArrayDeque<>(Arrays.asList(new Cell(i, j), newLevelCell));
-                    int length = 0;
-                    while (!queue.isEmpty()) {
-                        Cell cur = queue.remove();
-                        if (cur == newLevelCell) {
-                            length++;
-                            if (!queue.isEmpty())
-                                queue.add(newLevelCell);
-                            continue;
-                        }
-
-                        int curValue = matrix[cur.getRow()][cur.getCol()];
-                        visited[cur.getRow()][cur.getCol()] = true;
-
-                        int top = cur.getRow() - 1;
-                        int bottom = cur.getRow() + 1;
-                        int left = cur.getCol() - 1;
-                        int right = cur.getCol() + 1;
-
-                        if (top >= 0 && matrix[top][cur.getCol()] > curValue) {
-                            queue.add(new Cell(top, cur.getCol()));
-                        }
-                        if (right < colCount && matrix[cur.getRow()][right] > curValue) {
-                            queue.add(new Cell(cur.getRow(), right));
-                        }
-                        if (bottom < matrix.length && matrix[bottom][cur.getCol()] > curValue) {
-                            queue.add(new Cell(bottom, cur.getCol()));
-                        }
-                        if (left >= 0 && matrix[cur.getRow()][left] > curValue) {
-                            queue.add(new Cell(cur.getRow(), left));
-                        }
-                    }
-
-                    if (length > maxLength)
-                        maxLength = length;
+                    unprocessed.add(new Cell(i, j));
                 }
             }
-            return maxLength;
+
+            int[][] maxLengths = new int[matrix.length][colCount];
+
+            int totalMaxLength = 0;
+            while (!unprocessed.isEmpty()) {
+                Cell cur = unprocessed.remove();
+                int curValue = matrix[cur.getRow()][cur.getCol()];
+
+                int top = cur.getRow() - 1;
+                int bottom = cur.getRow() + 1;
+                int left = cur.getCol() - 1;
+                int right = cur.getCol() + 1;
+
+                int maxLength = 0;
+                if (top >= 0 && matrix[top][cur.getCol()] > curValue) {
+                    maxLength = Math.max(0, maxLengths[top][cur.getCol()]);
+                }
+                if (right < colCount && matrix[cur.getRow()][right] > curValue) {
+                    maxLength = Math.max(maxLength, maxLengths[cur.getRow()][right]);
+                }
+                if (bottom < matrix.length && matrix[bottom][cur.getCol()] > curValue) {
+                    maxLength = Math.max(maxLength, maxLengths[bottom][cur.getCol()]);
+                }
+                if (left >= 0 && matrix[cur.getRow()][left] > curValue) {
+                    maxLength = Math.max(maxLength, maxLengths[cur.getRow()][left]);
+                }
+                maxLength++;
+
+                maxLengths[cur.getRow()][cur.getCol()] = maxLength;
+
+                totalMaxLength = Math.max(totalMaxLength, maxLength);
+            }
+            return totalMaxLength;
         }
 
         static final class Cell {
