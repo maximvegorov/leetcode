@@ -21,7 +21,6 @@ public class LongestIncreasingPathInAMatrix {
 
             int colCount = matrix[0].length;
 
-            Cell[][] cells = new Cell[matrix.length][colCount];
             PriorityQueue<Cell> unprocessed = new PriorityQueue<>(
                     Comparator.comparingInt(cell -> -matrix[cell.getRow()][cell.getCol()]));
             for (int i = 0; i < matrix.length; i++) {
