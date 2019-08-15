@@ -1,9 +1,8 @@
 package leetcode;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public final class Permutations {
     public static void main(String[] args) {
@@ -13,37 +12,46 @@ public final class Permutations {
     }
 
     public static class Solution {
-        private static List<List<Integer>> perms(Integer[] nums, int l) {
+        public List<List<Integer>> permute(int[] nums) {
+            List<List<Integer>> resultList = new ArrayList<>();
+            generatePerms(resultList, nums, 0);
+            return resultList;
+        }
+
+        private static void generatePerms(List<List<Integer>> resultList, int[] nums, int l) {
             if (l >= nums.length) {
-                return Collections.singletonList(new ArrayList<>(nums.length));
+                resultList.add(new Permutation(Arrays.copyOf(nums, nums.length)));
             }
 
-            List<List<Integer>> result = new ArrayList<>();
-
             for (int i = l; i < nums.length; i++) {
-                Integer num = nums[i];
+                int num = nums[i];
 
                 nums[i] = nums[l];
                 nums[l] = num;
 
-                List<List<Integer>> perms = perms(nums, l + 1);
+                generatePerms(resultList, nums, l + 1);
 
                 nums[l] = nums[i];
                 nums[i] = num;
-
-                for (List<Integer> perm : perms) {
-                    perm.add(num);
-                }
-
-                result.addAll(perms);
             }
-
-            return result;
-
         }
 
-        public List<List<Integer>> permute(int[] nums) {
-            return perms(IntStream.of(nums).boxed().toArray(Integer[]::new), 0);
+        private static final class Permutation extends java.util.AbstractList<Integer> {
+            private final int[] elements;
+
+            Permutation(int[] elements) {
+                this.elements = elements;
+            }
+
+            @Override
+            public Integer get(int index) {
+                return elements[index];
+            }
+
+            @Override
+            public int size() {
+                return elements.length;
+            }
         }
     }
 }
