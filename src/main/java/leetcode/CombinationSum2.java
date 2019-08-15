@@ -10,7 +10,6 @@ public class CombinationSum2 {
 
         Arrays.sort(candidates);
 
-
         Set<Combination> combinations = doCombinationSum(candidates, target, candidates.length);
 
         List<List<Integer>> result = new ArrayList<>(combinations.size());
